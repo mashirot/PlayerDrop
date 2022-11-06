@@ -164,10 +164,11 @@ class Command : TabExecutor {
             if (p3.size == 1) {
                 val listDropItem = DropItemData.listDropItem()
                 if (listDropItem == null) {
-                    p0.sendMessage("[PlayerDrop] 该掉落物组不存在")
+                    p0.sendMessage("[PlayerDrop] 不存在掉落物组，请新建")
                     return true
                 }
                 p0.sendMessage("=====PlayerDrop=====")
+                p0.sendMessage("=======掉落物组=======")
                 var index = 1
                 for (item in listDropItem) {
                     p0.sendMessage("${index++}. $item")
@@ -212,7 +213,7 @@ class Command : TabExecutor {
 
     override fun onTabComplete(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>): MutableList<String>? {
         if (p3.size == 1) {
-            return arrayListOf("create", "delete", "group", "give", "help")
+            return arrayListOf("create", "delete", "group", "give", "list", "help")
         }
         if (p3.size == 3) {
             if (p3[0] == "create") {

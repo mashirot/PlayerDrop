@@ -22,7 +22,7 @@ class Listener : Listener {
         }
         val player = e.entity as Player
         for (entry in DropItem.dropItemList.entries) {
-            if (player.hasPermission("dropitem.drop.${entry.key}")) {
+            if (player.hasPermission("playerdrop.drop.${entry.key}")) {
                 DropItemData.dropItem(player.location, entry.key)
                 break
             }
