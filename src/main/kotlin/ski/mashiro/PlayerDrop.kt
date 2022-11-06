@@ -6,6 +6,7 @@ import ski.mashiro.command.Command
 import ski.mashiro.file.Config
 import ski.mashiro.file.DropItem
 import ski.mashiro.listener.Listener
+import ski.mashiro.net.Metrics
 import ski.mashiro.net.Update
 import ski.mashiro.util.Utils
 
@@ -26,6 +27,7 @@ class PlayerDrop : JavaPlugin() {
         Bukkit.getPluginCommand("playerdrop")!!.tabCompleter = Command()
         Bukkit.getPluginManager().registerEvents(Listener(), this)
         this.logger.info("加载完成")
+        Metrics(this, 16818)
         Update.checkUpdate(this)
     }
 
