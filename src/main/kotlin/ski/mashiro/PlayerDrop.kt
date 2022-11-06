@@ -1,5 +1,6 @@
 package ski.mashiro
 
+import org.bstats.bukkit.Metrics
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import ski.mashiro.command.Command
@@ -26,6 +27,7 @@ class PlayerDrop : JavaPlugin() {
         Bukkit.getPluginCommand("playerdrop")!!.tabCompleter = Command()
         Bukkit.getPluginManager().registerEvents(Listener(), this)
         this.logger.info("加载完成")
+        Metrics(this, 16818)
         Update.checkUpdate(this)
     }
 
