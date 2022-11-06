@@ -1,0 +1,10 @@
+name: PlayerDrop
+version: '${project.version}'
+main: ski.mashiro.PlayerDrop
+api-version: 1.13
+authors: [ MashiroT ]
+description: 玩家掉落物
+commands:
+  playerdrop:
+    usage: ""
+    aliases: [ pd ]
