@@ -5,8 +5,10 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import ski.mashiro.file.DropItem
 import ski.mashiro.pojo.DropItemPart
+import ski.mashiro.util.Utils
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * @author FeczIne
@@ -21,26 +23,37 @@ class DropItemData {
                 return false
             }
             val partList = ArrayList<DropItemPart>()
-            partList.add(DropItemPart(partName, percent, inventory.contents.asList() as ArrayList<ItemStack>))
+            val inventoryList = Utils.copyItemStackList(inventory.contents.asList())
+            partList.add(DropItemPart(partName, percent, inventoryList))
             DropItem.dropItemList[groupName] = ski.mashiro.pojo.DropItem(partList)
             return true
         }
 
-        fun addDropItemPart(groupName: String, partName: String, percent: Int, inventory: Inventory) : Boolean {
+        fun delDropItem(str : String) : Boolean {
+            val it = DropItem.dropItemList.entries.iterator()
+            while (it.hasNext()) {
+                if (it.next().key == str) {
+                    it.remove()
+                    return true
+                }
+            }
+            return false
+        }
+
+        fun addDropItemPart(groupName : String, partName : String, percent: Int, inventory : Inventory) : Boolean {
             if (DropItem.dropItemList.isEmpty() || !DropItem.dropItemList.contains(groupName)) {
                 return false
             }
             for (entry in DropItem.dropItemList.entries) {
                 if (groupName == entry.key) {
-                    var flag = false
                     for (part in entry.value.parts) {
                         if (partName == part.partName) {
-                            flag = true
+                            return false
                         }
                     }
-                    if (!flag) {
-                        entry.value.parts.add(DropItemPart(partName, percent, inventory.contents.asList() as ArrayList<ItemStack>))
-                    }
+                    val inventoryList = Utils.copyItemStackList(inventory.contents.asList())
+                    entry.value.parts.add(DropItemPart(partName, percent, inventoryList))
+                    return true
                 }
             }
             return false
@@ -62,20 +75,67 @@ class DropItemData {
                             return 1
                         }
                     }
+                    return -2
                 }
             }
             return 0
         }
 
-        fun delDropItem(str : String) : Boolean {
-            val it = DropItem.dropItemList.entries.iterator()
-            while (it.hasNext()) {
-                if (it.next().key == str) {
-                    it.remove()
-                    return true
+        fun modifyDropItemPart(groupName : String, partName : String, percent : Int, inventory : Inventory) : Boolean {
+            if (DropItem.dropItemList.isEmpty()) {
+                return false
+            }
+            for (entry in DropItem.dropItemList.entries) {
+                if (groupName == entry.key) {
+                    for (part in entry.value.parts) {
+                        if (partName == part.partName) {
+                            part.percent = percent
+                            part.items = Utils.copyItemStackList(inventory.contents.asList())
+                            return true
+                        }
+                    }
                 }
             }
             return false
+        }
+
+        fun getDropItemPart(groupName: String, partName: String) : ArrayList<ItemStack>? {
+            if (DropItem.dropItemList.isEmpty()) {
+                return null
+            }
+            for (entry in DropItem.dropItemList.entries) {
+                if (groupName == entry.key) {
+                    for (part in entry.value.parts) {
+                        if (partName == part.partName) {
+                            return part.items
+                        }
+                    }
+                }
+            }
+            return null
+        }
+
+        fun listDropItem() : List<String>? {
+            if (DropItem.dropItemList.isEmpty()) {
+                return null
+            }
+            val dropItemList = ArrayList<String>(DropItem.dropItemList.size)
+            for (entry in DropItem.dropItemList.entries) {
+                dropItemList.add(entry.key)
+            }
+            return dropItemList
+        }
+
+        fun listDropItemPart(groupName : String) : Map<String, Int>? {
+            if (DropItem.dropItemList.isEmpty() || !DropItem.dropItemList.contains(groupName)) {
+                return null
+            }
+            val parts = DropItem.dropItemList[groupName]!!.parts
+            val dropItemPartList = HashMap<String, Int>(parts.size)
+            for (part in parts) {
+                dropItemPartList[part.partName] = part.percent
+            }
+            return dropItemPartList
         }
 
         fun dropItem(location : Location, groupName : String) {

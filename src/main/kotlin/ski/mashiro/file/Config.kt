@@ -28,12 +28,14 @@ class Config {
             config = if (readValue.version == Utils.plugin.description.version.toDouble()) readValue else Config(Utils.plugin.description.version.toDouble(), readValue.checkUpdate)
         }
 
-        private fun createConfigFile() {
+        fun createConfigFile() {
             if (!Utils.plugin.dataFolder.exists()) {
                 Utils.plugin.dataFolder.mkdir()
             }
-            if (configFile.createNewFile()) {
-                FileUtils.writeStringToFile(configFile, Utils.yamlMapper.writeValueAsString(Config(Utils.plugin.description.version.toDouble(), true)), "utf-8")
+            if (!configFile.exists()) {
+                if (configFile.createNewFile()) {
+                    FileUtils.writeStringToFile(configFile, Utils.yamlMapper.writeValueAsString(Config(Utils.plugin.description.version.toDouble(), true)), "utf-8")
+                }
             }
         }
     }

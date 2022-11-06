@@ -36,4 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
-./idea
+/.idea/encodings.xml
+/.idea/kotlinc.xml
+/.idea/inspectionProfiles/Project_Default.xml
