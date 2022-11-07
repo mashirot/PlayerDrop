@@ -70,6 +70,8 @@
                         <phase>package</phase>
                         <goals><goal>single</goal></goals>
                         <configuration>
+                            <finalName>${project.name}-${project.version}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                             <archive>
                                 <manifest>
                                     <mainClass>ski.mashiro.PlayerDrop</mainClass>
